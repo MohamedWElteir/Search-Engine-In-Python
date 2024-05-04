@@ -27,6 +27,8 @@ while True:
     # --- Ranking ---
     collection_freq = calculate_collection_frequencies(preprocessed_docs) 
     vsm_results_ranked = sorted(vsm_results, key=lambda x: jelinek_mercer_smoothing(preprocess(query), preprocessed_docs[x[0]], collection_freq), reverse=True)
+    print("Collection Frequencies:", collection_freq)
+    print("VSM Results Ranked:", vsm_results_ranked)
 
     # --- Relevance Feedback ---
     threshold = 0.6  
