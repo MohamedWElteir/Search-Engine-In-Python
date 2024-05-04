@@ -43,8 +43,8 @@ def calculate_document_similarity(doc1, doc2):  # Assuming doc1 and doc2 are vec
     Returns:
         float: The cosine similarity score (between 0 and 1).
     """
-    print("doc1", doc1)
-    print("doc2", doc2)
+    print("doc1 type", doc1.dtype)  
+    print("doc2 type", doc2.dtype)
     return np.dot(doc1, doc2) / (np.linalg.norm(doc1) * np.linalg.norm(doc2))
 
 
@@ -61,3 +61,9 @@ if __name__ == "__main__":
     doc2_terms = {"search", "engine", "world"}
     similarity = calculate_jaccard_similarity(doc1_terms, doc2_terms) 
     print(f"Jaccard similarity: {similarity:.4f}")
+
+    # For document similarity
+    doc1 = np.array([1, 2, 3])
+    doc2 = np.array([4, 1, 0])
+    similarity = calculate_document_similarity(doc1, doc2)
+    print(f"Document similarity: {similarity:.4f}")
