@@ -43,6 +43,8 @@ def calculate_document_similarity(doc1, doc2):  # Assuming doc1 and doc2 are vec
     Returns:
         float: The cosine similarity score (between 0 and 1).
     """
+    print("doc1", doc1)
+    print("doc2", doc2)
     return np.dot(doc1, doc2) / (np.linalg.norm(doc1) * np.linalg.norm(doc2))
 
 

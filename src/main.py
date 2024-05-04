@@ -21,8 +21,10 @@ while True:
         break
 
     # --- Search Algorithms --- 
-    boolean_results = boolean_search(query, preprocessed_docs)  
+    boolean_results = boolean_search(query, preprocessed_docs) 
     vsm_results = vector_space_search(query, preprocessed_docs)
+    print("Boolean Search Results:", boolean_results)
+    print("Vector Space Model Results:", vsm_results)
 
     # --- Ranking ---
     collection_freq = calculate_collection_frequencies(preprocessed_docs) 
