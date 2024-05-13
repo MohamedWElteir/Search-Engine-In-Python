@@ -51,3 +51,4 @@ while True:
     print(f"Recall: {recall:.4f}")
     print(f"F1 Measure: {f1:.4f}")
     print(f"Rank Power: {rank_power:.4f}") 
+    print("Updated")
