@@ -57,13 +57,7 @@ def calculate_rank_power(relevant, retrieved):
   if not relevant:
     return 0  # Handle no relevant documents
 
-  sum_reciprocal_ranks = 0
-  for i, doc in enumerate(retrieved):
-    if doc in relevant:
-      rank = i + 1  # Ranks start at 1
-      sum_reciprocal_ranks += 1 / rank
-
-  return sum_reciprocal_ranks / len(relevant)
+  return sum(relevant) / len(relevant)**2
 
 # Example for debugging
 if __name__ == "__main__":

@@ -1,4 +1,6 @@
-import numpy as np 
+import numpy as np
+
+
 def preprocess(text):
     """
     Basic preprocessing: Lowercase, tokenize (add stemming/lemmatization if desired).
@@ -33,10 +35,18 @@ def boolean_search(query, documents):
 
     relevant_docs = []
     for i, doc in enumerate(preprocessed_docs): # Iterate over documents
-        if all(term in doc for term in preprocessed_query if term[0] != "-") and all(term not in doc for term in preprocessed_query if term[0] == "-"):
-            relevant_docs.append(i)
+        if all(term in doc for term in preprocessed_query ):
 
-    return relevant_docs
+            relevant_docs.append(1)
+        else:
+            relevant_docs.append(0)
+    for i,bool in enumerate(relevant_docs):
+        if bool ==0:
+            print(f"document_{i + 1} -> non relevant")
+        else:
+            print(f"document_{i + 1} -> relevant")
+
+
 
 def create_term_document_matrix(documents):
     """
@@ -94,6 +104,7 @@ def vector_space_search(query, documents):
 def calculate_collection_frequencies(documents):
     collection_freq = {}
     for doc in documents:
+        doc=doc.split()
         for term in doc:
             if term in collection_freq:
                 collection_freq[term] += 1

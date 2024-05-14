@@ -42,11 +42,12 @@ def jelinek_mercer_smoothing(query_terms, document, collection_freq, lambda_para
         float: The Jelinek-Mercer smoothed probability.
     """
     score = 1.0
+
     for term in query_terms:
         term_doc_freq = document.count(term)
         term_collection_freq = collection_freq.get(term, 0)
-        p_jm = (lambda_param * term_doc_freq / len(document)) + \
-               ((1 - lambda_param) * term_collection_freq / sum(collection_freq.values()))
+        p_jm = ((1-lambda_param) * term_doc_freq / len(document)) + \
+               (lambda_param * term_collection_freq / sum(collection_freq.values()))
         score *= p_jm
 
     return score

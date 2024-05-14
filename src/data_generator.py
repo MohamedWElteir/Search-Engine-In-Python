@@ -1,30 +1,57 @@
 import random
-import string
-import os
 
-def generate_random_document(doc_length=100, save_to_file=False, data_dir="data"):
-    """
-    Generates a random document of specified length.
+word_list_path = "wordList.txt"
 
-    Args:
-        doc_length (int): Desired length of the document (in characters). Defaults to 100.
-        save_to_file (bool): If True, saves the document to a file in the 'data' directory. Defaults to False.
-        data_dir (str): The directory where documents should be saved. Defaults to "data".
 
-    Returns:
-        str: The generated document content.
-    """
+def read_file(file_path):
+    with open(file_path, 'r') as file:
+        words = file.read().lower()
+        return words.split()
 
-    content = "".join(random.choice(string.ascii_lowercase) for _ in range(doc_length))
 
-    if save_to_file:
-        if not os.path.exists(data_dir):
-            os.makedirs(data_dir)  # Create the 'data' directory if it doesn't exist
+# Read the word list from the file
+word_list = read_file(word_list_path)
 
-        doc_name = f"document_{len(os.listdir(data_dir)) + 1}.txt"  # Auto-generate filename
-        file_path = os.path.join(data_dir, doc_name)
+def start():
+    def generate_random_words(word_list, num_words):
+        """Generates a list of random words without duplicates, up to num_words."""
+        random_words = []
+        while len(random_words) < num_words:
+            word = random.choice(word_list)
+            random_words.append(word)
+        return random_words
 
-        with open(file_path, "w") as f:
-            f.write(content)
+    # def make(NUM):
+    #     docs = []
+    #     for i in range(NUM):
+    #         docs[i]=generate_random_words(word_list,num_words)
 
-    return content
+    # # Generate random documents with 100 words each
+    # empty_documents = [[] for _ in range(4)]  # List of four empty lists
+    # for document in empty_documents:
+    #   document.extend(generate_random_words(word_list, 100))
+    # file_names=['DOC1.txt','DOC2.txt','DOC3.txt','DOC4.txt']
+    # for i, document in enumerate(empty_documents):
+    #     file_name = file_names[i]
+    #     with open(file_name, "w") as file:
+    #       file.write("\n".join(document))
+    #
+    # # Print the generated documents
+    # for i, document in enumerate(empty_documents):
+    #   print(f"Document {i+1}: {document}")
+
+    # Generate random documents with 100 words each
+    num = int(input("enter number of docs:"))
+    file_names = []
+    empty_documents = [[] for _ in range(num)]  # List of four empty lists
+    for document in empty_documents:
+        document.extend(generate_random_words(word_list, 100))
+    for i in range(num):
+        file_names.append(f'DOC{i + 1}.txt')
+    for i, document in enumerate(empty_documents):
+        file_name = file_names[i]
+        with open(file_name, "w") as file:
+            file.write("\n".join(document))
+    # Print the generated documents
+    for i, document in enumerate(empty_documents):
+        print(f"Document {i + 1}: {document}")
