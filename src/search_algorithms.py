@@ -1,10 +1,11 @@
 import imp
+from annotated_types import LowerCase
 import numpy as np
 from nltk.stem import PorterStemmer, WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 
 
-def preprocess(text:str)-> str:
+def preprocess(text:str):
     """
     Basic preprocessing: Lowercase, tokenize, and apply stemming/lemmatization.
 
@@ -14,7 +15,7 @@ def preprocess(text:str)-> str:
     Returns:
         list: A list of processed tokens.
     """
-    tokens = word_tokenize(text.lower())
+    tokens = word_tokenize(text)
     stemmer = PorterStemmer()
     lemmatizer = WordNetLemmatizer()
     processed_tokens = []
@@ -23,7 +24,8 @@ def preprocess(text:str)-> str:
         stemmed_token = stemmer.stem(token)
         lemmatized_token = lemmatizer.lemmatize(token)
         processed_tokens.append(lemmatized_token)
-    return ' '.join(processed_tokens)
+        string = ' '.join(processed_tokens)
+    return string
 
 
 def boolean_search(query:str, documents:list) -> list:
@@ -102,7 +104,7 @@ def vector_space_search(query, documents):
     Returns:
         list: A list of tuples (document index, similarity score).
     """
-    preprocessed_query = preprocess(query)
+    preprocessed_query = [preprocess(query) for query in query]
     preprocessed_docs = [preprocess(doc) for doc in documents]
 
     term_document_matrix = create_term_document_matrix(preprocessed_docs)
@@ -126,3 +128,33 @@ def calculate_collection_frequencies(documents):
                 collection_freq[term] = 1
     return collection_freq
 
+
+def statistical_search(query, documents):
+    """
+    Perform a statistical search by calculating a simple relevancy score.
+    Args:
+        query (str): The search query.
+        documents (list of str): The list of documents.
+    Returns:
+        None
+    """
+    preprocessed_query = preprocess(query)
+    print(preprocessed_query)
+    preprocessed_docs = [preprocess(doc) for doc in documents]
+    scores = []
+
+    for doc in preprocessed_docs:
+        score = 0.0
+        for term in preprocessed_query:
+            term_stats = doc.count(term) / len(doc)
+            score += term_stats
+        scores.append(score)
+
+    indexed_scores = [(i + 1, value) for i, value in enumerate(scores)]
+
+    # Sort the list of tuples based on the values in descending order
+    sorted_scores = sorted(indexed_scores, key=lambda x: x[1], reverse=True)
+
+    print("Relevancy will be:-")
+    for index, value in sorted_scores:
+        print(f"DOC{{{index}}} -> {value}")
