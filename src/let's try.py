@@ -32,4 +32,3 @@ for i, document in enumerate(empty_documents):
 # Print the generated documents
 for i, document in enumerate(empty_documents):
   print(f"Document {i+1}: {document}")
-

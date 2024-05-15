@@ -1,18 +1,30 @@
-import random
+import random,os
+from nltk.tokenize import word_tokenize
+
 
 word_list_path = "wordList.txt"
-
-
 def read_file(file_path):
     with open(file_path, 'r') as file:
-        words = file.read().lower()
-        return words.split()
+        content = file.read()
+        content = word_tokenize(content)
+    return content
 
 
 # Read the word list from the file
 word_list = read_file(word_list_path)
 
-def start():
+def content_to_list(folder_path):
+    all_files_content=[]
+    for filename in os.listdir("data"):
+        if os.path.isfile(os.path.join(folder_path, filename)):    #check if file
+            file_path = os.path.join(folder_path, filename)
+            with open(file_path, "r") as file:
+                file_contents=[line.strip() for line in file.readlines()]
+            all_files_content.append(file_contents)
+    return all_files_content
+
+
+def generate():
     def generate_random_words(word_list, num_words):
         """Generates a list of random words without duplicates, up to num_words."""
         random_words = []
@@ -21,33 +33,17 @@ def start():
             random_words.append(word)
         return random_words
 
-    # def make(NUM):
-    #     docs = []
-    #     for i in range(NUM):
-    #         docs[i]=generate_random_words(word_list,num_words)
-
-    # # Generate random documents with 100 words each
-    # empty_documents = [[] for _ in range(4)]  # List of four empty lists
-    # for document in empty_documents:
-    #   document.extend(generate_random_words(word_list, 100))
-    # file_names=['DOC1.txt','DOC2.txt','DOC3.txt','DOC4.txt']
-    # for i, document in enumerate(empty_documents):
-    #     file_name = file_names[i]
-    #     with open(file_name, "w") as file:
-    #       file.write("\n".join(document))
-    #
-    # # Print the generated documents
-    # for i, document in enumerate(empty_documents):
-    #   print(f"Document {i+1}: {document}")
-
     # Generate random documents with 100 words each
     num = int(input("enter number of docs:"))
+    folder_name="data"
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
     file_names = []
     empty_documents = [[] for _ in range(num)]  # List of four empty lists
     for document in empty_documents:
         document.extend(generate_random_words(word_list, 100))
     for i in range(num):
-        file_names.append(f'DOC{i + 1}.txt')
+        file_names.append(f"{folder_name}/DOC{i + 1}.txt")
     for i, document in enumerate(empty_documents):
         file_name = file_names[i]
         with open(file_name, "w") as file:
@@ -55,3 +51,27 @@ def start():
     # Print the generated documents
     for i, document in enumerate(empty_documents):
         print(f"Document {i + 1}: {document}")
+
+
+def take_inputes_from_users():
+    num = int(input("enter the number of files : "))
+    file_path = []
+    content = []
+    for i in range(num):
+        file_path.append(input("enter the file destination : "))
+        # Read the Files and divide them into tokens to compare them
+        content.append(read_file(file_path[i]))
+    print(content)
+    print(len(content))
+    return content
+
+
+def start():
+    user_choice = input("[*]do U want to generate files randomly ? :")
+    if user_choice.__eq__("yes"):
+        generate()
+    else:
+        take_inputes_from_users()
+
+
+

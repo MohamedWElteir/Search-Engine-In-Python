@@ -32,7 +32,7 @@ def calculate_jaccard_similarity(set1, set2):
 
 import numpy as np
 
-def calculate_document_similarity(doc1, doc2):  # Assuming doc1 and doc2 are vectors
+def calculate_document_similarity(doc1, doc2):
     """
     Calculates cosine similarity between two vectors.
 

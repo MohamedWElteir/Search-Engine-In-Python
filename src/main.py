@@ -1,4 +1,4 @@
-from data_generator import read_file, start
+from data_generator import read_file, start,content_to_list
 from search_algorithms import preprocess, boolean_search, vector_space_search, calculate_collection_frequencies 
 from similarity import calculate_cosine_similarity, calculate_jaccard_similarity, calculate_document_similarity
 from ranking import query_likelihood_model, jelinek_mercer_smoothing
@@ -6,6 +6,7 @@ from evaluation import calculate_precision, calculate_recall, calculate_f1_measu
 
 
 start()
+content=content_to_list("data")
 
 
 
