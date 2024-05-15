@@ -12,10 +12,7 @@ def preprocess(text):
         list: A list of processed tokens.
     """
     tokens = text.lower().split()
-    
-
-    # Convert the list of tokens back into a string 
-    return " ".join(tokens) 
+    return tokens
 
 
 def boolean_search(query, documents):
@@ -31,7 +28,7 @@ def boolean_search(query, documents):
     """
    
     preprocessed_query = preprocess(query)
-    preprocessed_docs = [preprocess(doc) for doc in documents]
+    preprocessed_docs  = [preprocess(doc) for doc in documents]
 
     relevant_docs = []
     for i, doc in enumerate(preprocessed_docs): # Iterate over documents
@@ -45,6 +42,41 @@ def boolean_search(query, documents):
             print(f"document_{i + 1} -> non relevant")
         else:
             print(f"document_{i + 1} -> relevant")
+
+def statistical_search(query, documents):
+    """
+    Perform a statistical search by calculating a simple relevancy score.
+
+    Args:
+        query (str): The search query.
+        documents (list of str): The list of documents.
+
+    Returns:
+        None
+    """
+    preprocessed_query = preprocess(query)
+    print(preprocessed_query)
+    preprocessed_docs = [preprocess(doc) for doc in documents]
+    scores = []
+
+    for doc in preprocessed_docs:
+        score = 0.0
+        for term in preprocessed_query:
+            term_stats = doc.count(term) / len(doc)
+            score += term_stats
+        scores.append(score)
+
+    indexed_scores = [(i + 1, value) for i, value in enumerate(scores)]
+
+    # Sort the list of tuples based on the values in descending order
+    sorted_scores = sorted(indexed_scores, key=lambda x: x[1], reverse=True)
+
+    print("Relevancy will be:-")
+    for index, value in sorted_scores:
+        print(f"DOC{{{index}}} -> {value}")
+
+
+
 
 
 

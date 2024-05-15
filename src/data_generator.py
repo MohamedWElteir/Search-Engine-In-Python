@@ -19,7 +19,7 @@ def content_to_list(folder_path):
         if os.path.isfile(os.path.join(folder_path, filename)):    #check if file
             file_path = os.path.join(folder_path, filename)
             with open(file_path, "r") as file:
-                file_contents=[line.strip() for line in file.readlines()]
+                file_contents = " ".join(line.strip() for line in file.readlines())
             all_files_content.append(file_contents)
     return all_files_content
 
