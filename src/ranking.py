@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def query_likelihood_model(query_terms, document, collection_freq=None):
+def query_likelihood_model(query_terms, document, collection_freq=None)-> float:
     """
     Calculates the probability of a query according to the Query Likelihood Model
 
@@ -28,7 +28,7 @@ def query_likelihood_model(query_terms, document, collection_freq=None):
     return score
 
 
-def jelinek_mercer_smoothing(query_terms, document, collection_freq, lambda_param=0.5):
+def jelinek_mercer_smoothing(query_terms, document, collection_freq, lambda_param=0.5)-> float:
     """
     Implements Jelinek-Mercer smoothing for language modeling.
 

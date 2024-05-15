@@ -819,10 +819,9 @@ weblogic
 webmaster
 whd
 wlcsystem
-wlpisystem
-wlse
 wradmin
 write
 www
 xmi_demo
+xml
 zyfwp

@@ -1,4 +1,4 @@
-from data_generator import read_file, start
+from data_generator import read_file, start,content_to_list
 from search_algorithms import preprocess, boolean_search, vector_space_search, calculate_collection_frequencies 
 from similarity import calculate_cosine_similarity, calculate_jaccard_similarity, calculate_document_similarity
 from ranking import query_likelihood_model, jelinek_mercer_smoothing
@@ -6,10 +6,11 @@ from evaluation import calculate_precision, calculate_recall, calculate_f1_measu
 
 
 start()
+content=content_to_list("data")
 
 
 
-documents=['the quick Brown fox','the quick brown DOG','hi my name is 7oda']
+documents=['the quick Brown quick fox','the quick brown DOG','hi my name is 7oda']
 preprocessed_docs= [preprocess(docs) for docs in documents]
 print(preprocessed_docs)
 # --- User Input ---
@@ -21,6 +22,7 @@ while True:
     # --- Search Algorithms ---
     print("********Boolean Search********")
     vsm_results = vector_space_search(query, preprocessed_docs)
+    print("vsm_results: ",vsm_results)
     boolean_search(query, documents)
 
     # --- Ranking ---
@@ -32,13 +34,15 @@ while True:
     # --- Relevance Feedback ---
     threshold = 0.6
     relevant_docs = [i for i, doc in enumerate(preprocessed_docs) if calculate_document_similarity(preprocess(query), doc) >= threshold]
-    #print("Relevant Documents:", relevant_docs)
+    print("Relevant Documents:", relevant_docs)
 
     # --- Evaluation ---
-    precision = calculate_precision(relevant_docs, [doc_index for doc_index, _ in vsm_results_ranked])
-    recall = calculate_recall(relevant_docs, [doc_index for doc_index, _ in vsm_results_ranked])  # Add recall
+    retrieved_docs = [doc_index for doc_index, _ in vsm_results_ranked]
+    precision = calculate_precision(relevant_docs, retrieved_docs)
+    recall = calculate_recall(relevant_docs, retrieved_docs)
     f1 = calculate_f1_measure(precision, recall)
-    rank_power = calculate_rank_power(relevant_docs, [doc_index for doc_index, _ in vsm_results_ranked])  # Add Rank Power
+    rank_power = calculate_rank_power(relevant_docs, retrieved_docs)
+    
 
     # --- Print Results ---
     #print("Boolean Search Results:", boolean_results)

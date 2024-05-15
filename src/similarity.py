@@ -1,7 +1,8 @@
+from pydoc import doc
 import numpy as np
 
 
-def calculate_cosine_similarity(vector1, vector2):
+def calculate_cosine_similarity(query, document):
     """
     Calculates cosine similarity between two vectors.
 
@@ -12,10 +13,10 @@ def calculate_cosine_similarity(vector1, vector2):
     Returns:
         float: The cosine similarity score (between 0 and 1).
     """
-    return np.dot(vector1, vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2))
+    return np.dot(query, document) / (np.linalg.norm(query) * np.linalg.norm(document))
 
 
-def calculate_jaccard_similarity(set1, set2):
+def calculate_jaccard_similarity(set1, set2)-> float:
     """
     Calculates Jaccard similarity between two sets of terms.
 
@@ -32,25 +33,53 @@ def calculate_jaccard_similarity(set1, set2):
 
 import numpy as np
 
-def calculate_document_similarity(doc1, doc2):  # Assuming doc1 and doc2 are vectors
+def calculate_document_similarity(query, document):
     """
-    Calculates cosine similarity between two vectors.
+    Calculates the similarity between a query and a document.
 
     Args:
-        doc1 (numpy.ndarray): The first vector.
-        doc2 (numpy.ndarray): The second vector.
+        query (str): The query text.
+        document (str): The document text.
 
     Returns:
-        float: The cosine similarity score (between 0 and 1).
+        float: The similarity score (between 0 and 1).
     """
-    return np.dot(doc1, doc2) / (np.linalg.norm(doc1) * np.linalg.norm(doc2))
+    query_vector = convert_document_to_vector(query)
+    document_vector = convert_document_to_vector(document)
+    
+    # Make sure both vectors have the same length
+    max_length = max(len(query_vector), len(document_vector))
+    query_vector = np.pad(query_vector, (0, max_length - len(query_vector)), mode='constant')
+    document_vector = np.pad(document_vector, (0, max_length - len(document_vector)), mode='constant')
+    
+    print(f"Query Vector: {query_vector}")
+    print(f"Document Vector: {document_vector}")
+
+    return calculate_cosine_similarity(query_vector, document_vector)
+
+
+def convert_document_to_vector(document):
+    """
+    Converts a document to a vector representation.
+
+    Args:
+        document (str): The document text.
+
+    Returns:
+        numpy.ndarray: The document vector.
+    """
+    print(f"Document: {document}")
+    words = document.split()
+    unique_words = set(words)
+    vector = np.array([words.count(word) for word in unique_words])
+    return vector
 
 
 # Example for debugging
 if __name__ == "__main__":
     # For cosine similarity
-    vector1 = np.array([1, 2, 3])
-    vector2 = np.array([4, 1, 0])
+    vector1 = np.array([1, 0, 1])
+    vector2 = np.array([1, 0, 1])
     similarity = calculate_cosine_similarity(vector1, vector2) 
     print(f"Cosine similarity: {similarity:.4f}")
 
