@@ -1,4 +1,6 @@
 import random,os
+from annotated_types import LowerCase
+import nltk
 from nltk.tokenize import word_tokenize
 
 
@@ -26,11 +28,10 @@ def content_to_list(folder_path):
 
 def generate():
     def generate_random_words(word_list, num_words):
-        """Generates a list of random words without duplicates, up to num_words."""
+        """Generates a list of random words, up to num_words."""
         random_words = []
         while len(random_words) < num_words:
-            word = random.choice(word_list)
-            random_words.append(word)
+            random_words.append(random.choice(word_list))
         return random_words
 
     # Generate random documents with 100 words each
@@ -67,8 +68,8 @@ def take_inputes_from_users():
 
 
 def start():
-    user_choice = input("[*]do U want to generate files randomly ? :")
-    if user_choice.__eq__("yes"):
+    user_choice = input("[*] Do U want to generate files randomly? : ")
+    if user_choice.lower() == "yes" or user_choice.lower() == "y" or user_choice == 1:
         generate()
     else:
         take_inputes_from_users()

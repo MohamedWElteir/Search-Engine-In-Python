@@ -1,9 +1,12 @@
+import imp
 import numpy as np
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk.tokenize import word_tokenize
 
 
-def preprocess(text):
+def preprocess(text:str)-> str:
     """
-    Basic preprocessing: Lowercase, tokenize (add stemming/lemmatization if desired).
+    Basic preprocessing: Lowercase, tokenize, and apply stemming/lemmatization.
 
     Args:
         text (str): The input text.
@@ -11,14 +14,19 @@ def preprocess(text):
     Returns:
         list: A list of processed tokens.
     """
-    tokens = text.lower().split()
-    
+    tokens = word_tokenize(text.lower())
+    stemmer = PorterStemmer()
+    lemmatizer = WordNetLemmatizer()
+    processed_tokens = []
 
-    # Convert the list of tokens back into a string 
-    return " ".join(tokens) 
+    for token in tokens:
+        stemmed_token = stemmer.stem(token)
+        lemmatized_token = lemmatizer.lemmatize(token)
+        processed_tokens.append(lemmatized_token)
+    return ' '.join(processed_tokens)
 
 
-def boolean_search(query, documents):
+def boolean_search(query:str, documents:list) -> list:
     """
     Implements Boolean search with AND, OR, NOT operators.
 
@@ -34,7 +42,7 @@ def boolean_search(query, documents):
     preprocessed_docs = [preprocess(doc) for doc in documents]
 
     relevant_docs = []
-    for i, doc in enumerate(preprocessed_docs): # Iterate over documents
+    for i, doc in enumerate(preprocessed_docs): 
         if all(term in doc for term in preprocessed_query ):
 
             relevant_docs.append(1)
@@ -45,10 +53,13 @@ def boolean_search(query, documents):
             print(f"document_{i + 1} -> non relevant")
         else:
             print(f"document_{i + 1} -> relevant")
+            
+
+    return relevant_docs
 
 
 
-def create_term_document_matrix(documents):
+def create_term_document_matrix(documents:list):
     """
     Builds a term-document matrix
 
@@ -68,6 +79,16 @@ def create_term_document_matrix(documents):
     return matrix
 
 def calculate_cosine_similarity(query_vector, doc_vector):
+    """
+    Calculates the cosine similarity between a query vector and a document vector.
+
+    Args:
+        query_vector (numpy.ndarray): The query vector.
+        doc_vector (numpy.ndarray): The document vector.
+
+    Returns:
+        float: The cosine similarity.
+    """
     return np.dot(query_vector, doc_vector) / (np.linalg.norm(query_vector) * np.linalg.norm(doc_vector))
 
 def vector_space_search(query, documents):
@@ -82,22 +103,15 @@ def vector_space_search(query, documents):
         list: A list of tuples (document index, similarity score).
     """
     preprocessed_query = preprocess(query)
-    print("Preprocessed query: ",preprocessed_query)
     preprocessed_docs = [preprocess(doc) for doc in documents]
-    print("Preprocessed docs: ",preprocessed_docs)
 
     term_document_matrix = create_term_document_matrix(preprocessed_docs)
-    print("Term document matrix: ",term_document_matrix)
+    vocabulary = list(set([term for doc in preprocessed_docs for term in doc]))  # Get the unique terms
+    query_vector = np.array([preprocessed_query.count(term) for term in vocabulary])
+    similarities = [calculate_cosine_similarity(query_vector, doc_vector) for doc_vector in term_document_matrix]
 
-   
-    query_vector = np.array([term_document_matrix[term_index, :] for term_index, term in enumerate(preprocessed_query.split()) if term in term_document_matrix]) 
-    print("Query vector: ",query_vector)
-    if len(preprocessed_query.split()) == 0 or all(term not in term_document_matrix for term in preprocessed_query.split()): # Handle the case where the query is empty or has no terms in common
-       similarities = [0 for _ in range(len(term_document_matrix.T))]  # Assign zero similarities for debugging purposes
-    else:
-      similarities = [calculate_cosine_similarity(query_vector, doc_vector) for doc_vector in term_document_matrix.T] 
-    print("similarities: ",similarities)
-    return list(zip(range(len(documents)), similarities)) 
+    return [(i, similarity) for i, similarity in enumerate(similarities)]
+
 
 
 
