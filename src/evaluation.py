@@ -43,13 +43,12 @@ def calculate_f1_measure(precision, recall):
     return 0  # Handle division by zero
   return 2 * (precision * recall) / (precision + recall)
 
-def calculate_rank_power(relevant, retrieved):
+def calculate_rank_power(relevant):
   """
   Calculates Rank Power: Measures the goodness of ranking based on relevant document positions.
 
   Args:
       relevant (list): List of indices of relevant documents.
-      retrieved (list): List of document indices sorted by similarity scores (highest first).
 
   Returns:
       float: The Rank Power score.

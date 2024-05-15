@@ -15,13 +15,13 @@ def read_file(file_path):
 # Read the word list from the file
 word_list = read_file(word_list_path)
 
-def content_to_list(folder_path):
+def content_to_list(folder_path)->list[str]:
     all_files_content=[]
     for filename in os.listdir("data"):
-        if os.path.isfile(os.path.join(folder_path, filename)):    #check if file
+        if os.path.isfile(os.path.join(folder_path, filename)):
             file_path = os.path.join(folder_path, filename)
             with open(file_path, "r") as file:
-                file_contents=[line.strip() for line in file.readlines()]
+                file_contents= " ".join(file.read().rstrip().split("\n"))
             all_files_content.append(file_contents)
     return all_files_content
 
