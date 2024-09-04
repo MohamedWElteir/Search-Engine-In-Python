@@ -1,1 +1,0 @@
-['the quick Brown quick fox','the quick brown DOG','hi my name is 7oda']
